@@ -62,5 +62,18 @@ public class EmployeeController {
         request.getSession().setAttribute("employee",emp.getId());
         return R.success(emp);
     }
+
+    /**
+     * 员工退出
+     * 要操作session就需要request
+     * @param request
+     * @return
+     */
+    @PostMapping("logout")
+    public R<String> logout(HttpServletRequest request){
+        //清理session中保存的登录员工的id
+        request.getSession().removeAttribute("employee");
+        return R.success("退出成功");
+    }
 }
 
