@@ -2,6 +2,7 @@ package com.reggie.entity;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -13,7 +14,7 @@ import java.time.LocalDateTime;
 @Data //自动整合Setter getter tostring 方法。
 public class Employee implements Serializable { //Serializable 实现序列化
     private static final long serialVersionUID = 1L;
-
+//    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private Long id;
 
     private String username;
