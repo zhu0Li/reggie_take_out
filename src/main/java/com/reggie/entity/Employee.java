@@ -16,17 +16,19 @@ public class Employee implements Serializable { //Serializable 实现序列化
 
     private Long id;
 
+    private String username;
 
-    //菜品id
-    private Long dishId;
-
-
-    //口味名称
     private String name;
 
+    private String password;
 
-    //口味数据list
-    private String value;
+    private String phone;
+
+    private String sex;
+
+    private String idNumber;
+
+    private Integer status;
 
     /**
      * fill: 自动填充策略
@@ -35,22 +37,16 @@ public class Employee implements Serializable { //Serializable 实现序列化
      * UPDATE	更新填充字段
      * INSERT_UPDATE	插入和更新填充字段
      */
+
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;
-
 
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime updateTime;
 
-
     @TableField(fill = FieldFill.INSERT)
     private Long createUser;
 
-
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private Long updateUser;
-
-
-    //是否删除
-    private Integer isDeleted;
 }
