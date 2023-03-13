@@ -17,3 +17,7 @@ mybatis-plus:
   global-config:
     db-config:
       id-type: ASSIGN_ID
+
+#声明一个地址用于存储图片
+riggie:
+  path: D:\code\java\mavenProject\images\
