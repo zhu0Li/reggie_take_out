@@ -3,12 +3,17 @@ package com.reggie.controller;
 import com.reggie.common.R;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.UUID;
 
@@ -58,5 +63,44 @@ public class CommonController {
         }
         //最后需要给页面返回文件，用于新增菜品
         return R.success(fileName);
+    }
+
+
+    /**
+     * 文件下载
+     * 使用void不需要返回值是因为：通过输出流向浏览器页面写回数据
+     * @param name 前端传回的数据，文件名
+     * @param response 输出流需要使用response来获得
+     */
+    @GetMapping("/download")
+    public void download(String name, HttpServletResponse response){
+        try {
+            //输入流，通过输入流读取文件内容
+            FileInputStream fileInputStream = new FileInputStream(new File(basePath+name));
+
+            //输出流，通过输出流将文件写回浏览器，在浏览器展示图片
+            //因为是向浏览器写回数据，所以直接使用response的输出流
+            ServletOutputStream outputStream = response.getOutputStream();
+
+            //设置响应回去的是什么类型文件
+            response.setContentType("image/jpeg");
+
+            int len = 0;
+            byte[] bytes = new byte[1023];
+            //以下while条件解释
+            //输入字节流in按照byte数组缓冲区每4个字节循环一次进行read操作，直到读到-1这个整数（-1是一个标识，就是文件数据的末尾）。
+            while((len = fileInputStream.read(bytes))!=-1){
+                outputStream.write(bytes,0,len);
+                outputStream.flush();
+            }
+
+            //关闭资源
+            outputStream.close();
+            fileInputStream.close();
+        } catch (Exception e) { //因为是编译异常，需要现场处理
+            throw new RuntimeException(e);
+        }
+
+
     }
 }
