@@ -31,6 +31,18 @@ public class GolbalExceptionHandler {
         }
 
         return R.error("未知错误");
+    }
+
+
+    /**
+     * 进行异常处理，处理自己定义的异常
+     * @return
+     */
+    @ExceptionHandler(CustomException.class)
+    public R<String> exceptionHandler(CustomException ex){
+        log.info(ex.getMessage());
+        String message = ex.getMessage();
+        return R.error(message);
 
     }
 

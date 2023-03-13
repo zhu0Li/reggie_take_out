@@ -60,9 +60,10 @@ public class CategoryController {
     @DeleteMapping
     public R<String> delete(Long id){
         log.info("删除分类，id：{}",id);
+//        categoryService.removeById(id);
 
-
-        categoryService.removeById(id);
+        //调用自己在业务层编写的remove方法
+        categoryService.remove(id);
         return R.success("分类信息删除成功");
     }
 }
