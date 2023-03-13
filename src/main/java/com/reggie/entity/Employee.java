@@ -32,13 +32,13 @@ public class Employee implements Serializable { //Serializable 实现序列化
     private Integer status;
 
     /**
+     * 加入注解，定义哪些字段为公共字段，并定义处理策略
      * fill: 自动填充策略
      * DEFAULT	默认不处理
      * INSERT	插入填充字段
      * UPDATE	更新填充字段
      * INSERT_UPDATE	插入和更新填充字段
      */
-
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;
 
