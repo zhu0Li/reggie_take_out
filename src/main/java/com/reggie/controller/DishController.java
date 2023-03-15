@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -146,5 +147,23 @@ public class DishController {
 
         List<Dish> list = dishService.list(queryWrapper);
         return R.success(list);
+    }
+
+    /**
+     * 修改停售起售
+     * @param status
+     * @param ids
+     * @return
+     */
+    @PostMapping("/status/{status}")
+    public R<String> status(@PathVariable int status, @RequestParam List<Long> ids){
+        List<Dish> dishes = dishService.listByIds(ids);
+        dishes.stream().map((item)->{
+            item.setStatus(status);
+            return dishes;
+        }).collect(Collectors.toList());
+        dishService.updateBatchById(dishes);
+
+        return status==0?R.success("停售成功"):R.success("起售成功");
     }
 }
