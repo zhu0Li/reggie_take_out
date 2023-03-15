@@ -35,8 +35,11 @@ public class LoginCheckFilter implements Filter {
                 "/employee/login",
                 "/employee/logout",
                 "/backend/**",
-                "/front/**"
-//                "/common/**"
+                "/front/**",
+                "/common/**",
+                //对用户登陆操作放行
+                "/user/login",
+                "/user/sendMsg"
         };
 
         //2、判断本次请求是否需要处理
