@@ -91,4 +91,17 @@ public class SetmealController {
 
         return R.success(dtoPage);
     }
+
+    /**
+     * 删除套餐
+     * @param id 变量名称需要与前端.js中的名称一致
+     * @return
+     */
+    @DeleteMapping
+    public R<String> delete(@RequestParam List<Long> id){
+        log.info("ids:{}",id);
+        setmealService.removeWithDish(id);
+        return R.success("套餐删除成功");
+    }
+
 }
