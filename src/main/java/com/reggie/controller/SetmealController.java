@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.reggie.common.R;
 import com.reggie.dto.SetmealDto;
 import com.reggie.entity.Category;
+import com.reggie.entity.Dish;
 import com.reggie.entity.Setmeal;
 import com.reggie.service.CategoryService;
 import com.reggie.service.SetmealDishService;
@@ -104,4 +105,15 @@ public class SetmealController {
         return R.success("套餐删除成功");
     }
 
+    @PostMapping("/status/{status}")
+    public R<String> status(@PathVariable int status, @RequestParam List<Long> ids){
+        List<Setmeal> setmeals = setmealService.listByIds(ids);
+        setmeals.stream().map((item)->{
+            item.setStatus(status);
+            return setmeals;
+        }).collect(Collectors.toList());
+        setmealService.updateBatchById(setmeals);
+
+        return status==0?R.success("停售成功"):R.success("起售成功");
+    }
 }
