@@ -2,6 +2,7 @@ package com.reggie.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.reggie.common.CustomException;
 import com.reggie.common.R;
 import com.reggie.dto.DishDto;
 import com.reggie.entity.Category;
@@ -165,5 +166,13 @@ public class DishController {
         dishService.updateBatchById(dishes);
 
         return status==0?R.success("停售成功"):R.success("起售成功");
+    }
+
+    @DeleteMapping
+    public R<String> delete(@RequestParam List<Long> id){
+
+        dishService.removeWithFlavor(id);
+
+        return R.success("删除成功");
     }
 }
