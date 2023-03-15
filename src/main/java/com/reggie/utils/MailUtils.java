@@ -17,7 +17,7 @@ import javax.mail.internet.MimeMessage.RecipientType;
 public class MailUtils {
     public static void main(String[] args) throws MessagingException {
         //可以在这里直接测试方法，填自己的邮箱即可
-        sendTestMail("1586385296@qq.com", new MailUtils().achieveCode());
+        sendTestMail("522192251@qq.com", new MailUtils().achieveCode());
     }
 
     public static void sendTestMail(String email, String code) throws MessagingException {
