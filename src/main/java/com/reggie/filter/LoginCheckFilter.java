@@ -52,7 +52,7 @@ public class LoginCheckFilter implements Filter {
             return;
         }
 
-        //4、判断登录状态，如果已登录，则直接放行
+        //4-1、判断登录状态，如果已登录，则直接放行
         if(request.getSession().getAttribute("employee")!=null){
             log.info("用户已登录");
 
@@ -62,6 +62,19 @@ public class LoginCheckFilter implements Filter {
 
             long id = Thread.currentThread().getId();
             log.info("线程id为：{}",id);
+
+            //已经登录，直接放行
+            filterChain.doFilter(request,response);
+            return;
+        }
+
+        //4-2、针对User用户、判断登录状态，如果已登录，则直接放行
+        if(request.getSession().getAttribute("user")!=null){
+            log.info("用户已登录，id为：{}",request.getSession().getAttribute("user"));
+
+            //调用线程功能设置当前线程中的id
+            Long userId = (Long) request.getSession().getAttribute("user");
+            BaseContext.setCurrentId(userId);
 
             //已经登录，直接放行
             filterChain.doFilter(request,response);
