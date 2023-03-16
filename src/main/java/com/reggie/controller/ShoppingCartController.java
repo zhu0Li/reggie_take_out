@@ -23,5 +23,52 @@ public class ShoppingCartController {
     @Autowired
     private ShoppingCartService shoppingCartService;
 
+    /**
+     * 添加购物车
+     * @param shoppingCart
+     * @return
+     */
+    @PostMapping("/add")
+    public R<ShoppingCart> add(@RequestBody ShoppingCart shoppingCart){
+        log.info("购物车数据：{}",shoppingCart);
+
+        //设置用户id，指定是某一用户的购物车数据
+        Long currentId = BaseContext.getCurrentId();
+        shoppingCart.setUserId(currentId);
+
+        LambdaQueryWrapper<ShoppingCart> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(ShoppingCart::getUserId,currentId);
+        //判断是菜品还是套餐
+        Long dishId = shoppingCart.getDishId();
+        if(dishId!=null){
+            //添加到购物车的是菜品
+            queryWrapper.eq(ShoppingCart::getDishId,dishId);
+//            queryWrapper.eq(ShoppingCart::getDishFlavor,shoppingCart.getDishFlavor());
+
+        }else {
+            //添加到购物车的是套餐
+            queryWrapper.eq(ShoppingCart::getSetmealId,shoppingCart.getSetmealId());
+
+        }
+
+        //查询菜品是否在购物车中
+        //select * from shopping_cart where user_id = ? and dish_id/setmeal_id = ? and dish_flavors = ?
+        ShoppingCart cartServiceOne = shoppingCartService.getOne(queryWrapper);
+
+        if(cartServiceOne!=null){
+            //如果已经存在，那么就在原来数量基础上加一
+                //获取原先的数量
+            Integer number = cartServiceOne.getNumber();
+            cartServiceOne.setNumber(number+1);
+            shoppingCartService.updateById(cartServiceOne);
+        }else {
+            //如果不存在；则添加购物车，否则默认加一
+            shoppingCart.setNumber(1);
+            shoppingCartService.save(shoppingCart);
+            cartServiceOne = shoppingCart;
+        }
+
+        return R.success(cartServiceOne);
+    }
 
 }
