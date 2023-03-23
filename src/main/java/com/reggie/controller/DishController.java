@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -55,6 +56,9 @@ public class DishController {
         log.info(dishDto.toString());
 
         dishService.saveWithFlavor(dishDto);
+        //清理某个分类下面的菜品缓存数据
+        String key = "dish_" + dishDto.getCategoryId() + "_" + dishDto.getStatus();
+        redisTemplate.delete(key);
         return R.success("新增菜品成功");
     }
 
@@ -133,6 +137,11 @@ public class DishController {
         log.info(dishDto.toString());
 
         dishService.updateWithFlavor(dishDto);
+
+        //清理某个分类下面的菜品缓存数据
+        String key = "dish_" + dishDto.getCategoryId() + "_" + dishDto.getStatus();
+        redisTemplate.delete(key);
+
         return R.success("修改菜品成功");
     }
 
@@ -228,6 +237,9 @@ public class DishController {
             return dishes;
         }).collect(Collectors.toList());
         dishService.updateBatchById(dishes);
+        //清理某个分类下面的菜品缓存数据
+        Set keys = redisTemplate.keys("dish_*");
+        redisTemplate.delete(keys);
 
         return status==0?R.success("停售成功"):R.success("起售成功");
     }
